@@ -1,77 +1,64 @@
 #include <unistd.h>
 
-int	ft_strcmp(char *s1, char *s2)
+int	parse_base(char *base)
 {
-	while (*s1)
+	int i;
+	int j;
+
+	i = 0;
+	while (base[i])
 	{
-		if (*s1 == *s2)
+		if (base[i] == '+' || base[i] == '-')
+			return (0);
+		j = i + 1;
+		while (base[j])
 		{
-			s1++;
-			s2++;
+			if (base[i] == base[j])
+				return (0);
+			j++;
 		}
-		else
-		{
-			return (*s1 - *s2);
-		}
+		i++;
 	}
-	return (*s1 - *s2);
-}
-
-char int_to_char_extended (int i)
-{	
-	if (i >= 0 && i <= 9)
-		return (i + '0');
-	if (i == 10)
-		return ('A');
-	if (i == 11)
-		return ('B');
-	if (i == 12)
-		return ('C');
-	if (i == 13)
-		return ('D');
-	if (i == 14)
-		return ('E');
-	if (i == 15)
-		return ('F');
-	else
-		return('\0');
-}
-
-int parse_base(char *base)
-{
-	int i_base;
-
-	if (!(ft_strcmp(base, "0123456789")))
-		i_base = 10;
-	else if (!(ft_strcmp(base, "01")))
-		i_base = 2;
-	else if (!(ft_strcmp(base, "0123456789ABCDEF")))
-		i_base = 16;
-	else if (!(ft_strcmp(base, "01234567")))
-		i_base = 8;
-	else 
+	if (i < 2)
 		return (0);
-	return (i_base);
+	return (i);
+}
+
+void	print_reverse(char *str, char *buffer)
+{
+	while (str > buffer)
+	{
+		str--;
+		write(1, str, 1);
+	}
 }
 
 void	ft_putnbr_base(int nbr, char *base)
 {
-	int i_base;
-	int i;
-	char *str;
+	int		i_base;
+	char	*str;
+	char	buffer[33];
+	long	n;
 
-	i = 0;
+	str = buffer;
+	n = nbr;
 	i_base = parse_base(base);
-	while (nbr % i_base != i_base)
+	if (i_base == 0)
+		return;
+	if (n < 0)
 	{
-		*str++ = int_to_char_extended(nbr % i_base);
-		nbr /= i_base;
-		i++;
+		write(1, "-", 1);
+		n = -n;
 	}
-	while ((i > 0))
+	if (n == 0)
 	{
-		write (1, (str - 1), 1);
-		str--;
-		i--;
+		write(1, base, 1);
+		return;
 	}
+	while (n > 0)
+	{
+		*str++ = base[n % i_base];
+		n /= i_base;
+	}
+	print_reverse(str, buffer);
 }
