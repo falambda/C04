@@ -24,41 +24,13 @@ int	parse_base(char *base)
 	return (i);
 }
 
-void	print_reverse(char *str, char *buffer)
-{
-	while (str > buffer)
-	{
-		str--;
-		write(1, str, 1);
-	}
-}
-
-void	print_number(long n, char *base, int i_base)
-{
-	char	buffer[33];
-	char	*str;
-
-	str = buffer;
-	if (n == 0)
-	{
-		write(1, base, 1);
-		return;
-	}
-	while (n > 0)
-	{
-		*str++ = base[n % i_base];
-		n /= i_base;
-	}
-	print_reverse(str, buffer);
-}
-
 void	ft_putnbr_base(int nbr, char *base)
 {
-	int		i_base;
 	long	n;
+	int		b;
 
-	i_base = parse_base(base);
-	if (!i_base)
+	b = parse_base(base);
+	if (!b)
 		return;
 	n = nbr;
 	if (n < 0)
@@ -66,5 +38,7 @@ void	ft_putnbr_base(int nbr, char *base)
 		write(1, "-", 1);
 		n = -n;
 	}
-	print_number(n, base, i_base);
+	if (n >= b)
+		ft_putnbr_base(n / b, base);
+	write(1, &base[n % b], 1);
 }
