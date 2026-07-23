@@ -33,23 +33,12 @@ void	print_reverse(char *str, char *buffer)
 	}
 }
 
-void	ft_putnbr_base(int nbr, char *base)
+void	print_number(long n, char *base, int i_base)
 {
-	int		i_base;
-	char	*str;
 	char	buffer[33];
-	long	n;
+	char	*str;
 
 	str = buffer;
-	n = nbr;
-	i_base = parse_base(base);
-	if (i_base == 0)
-		return;
-	if (n < 0)
-	{
-		write(1, "-", 1);
-		n = -n;
-	}
 	if (n == 0)
 	{
 		write(1, base, 1);
@@ -61,4 +50,21 @@ void	ft_putnbr_base(int nbr, char *base)
 		n /= i_base;
 	}
 	print_reverse(str, buffer);
+}
+
+void	ft_putnbr_base(int nbr, char *base)
+{
+	int		i_base;
+	long	n;
+
+	i_base = parse_base(base);
+	if (!i_base)
+		return;
+	n = nbr;
+	if (n < 0)
+	{
+		write(1, "-", 1);
+		n = -n;
+	}
+	print_number(n, base, i_base);
 }
